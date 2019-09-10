@@ -10,22 +10,22 @@ using MyVet.Web.Data.Entities;
 
 namespace MyVet.Web.Controllers
 {
-    public class OwnersController : Controller
+    public class PetsController : Controller
     {
         private readonly DataContext _context;
 
-        public OwnersController(DataContext context)
+        public PetsController(DataContext context)
         {
             _context = context;
         }
 
-        // GET: Owners
+        // GET: Pets
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Owners.ToListAsync());
+            return View(await _context.Pets.ToListAsync());
         }
 
-        // GET: Owners/Details/5
+        // GET: Pets/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,39 +33,39 @@ namespace MyVet.Web.Controllers
                 return NotFound();
             }
 
-            var owner = await _context.Owners
+            var pet = await _context.Pets
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (owner == null)
+            if (pet == null)
             {
                 return NotFound();
             }
 
-            return View(owner);
+            return View(pet);
         }
 
-        // GET: Owners/Create
+        // GET: Pets/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Owners/Create
+        // POST: Pets/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id")] Owner owner)
+        public async Task<IActionResult> Create([Bind("Id,Name,ImageUrl,Race,Born,Remarks")] Pet pet)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(owner);
+                _context.Add(pet);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(owner);
+            return View(pet);
         }
 
-        // GET: Owners/Edit/5
+        // GET: Pets/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -73,22 +73,22 @@ namespace MyVet.Web.Controllers
                 return NotFound();
             }
 
-            var owner = await _context.Owners.FindAsync(id);
-            if (owner == null)
+            var pet = await _context.Pets.FindAsync(id);
+            if (pet == null)
             {
                 return NotFound();
             }
-            return View(owner);
+            return View(pet);
         }
 
-        // POST: Owners/Edit/5
+        // POST: Pets/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id")] Owner owner)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,ImageUrl,Race,Born,Remarks")] Pet pet)
         {
-            if (id != owner.Id)
+            if (id != pet.Id)
             {
                 return NotFound();
             }
@@ -97,12 +97,12 @@ namespace MyVet.Web.Controllers
             {
                 try
                 {
-                    _context.Update(owner);
+                    _context.Update(pet);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!OwnerExists(owner.Id))
+                    if (!PetExists(pet.Id))
                     {
                         return NotFound();
                     }
@@ -113,10 +113,10 @@ namespace MyVet.Web.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(owner);
+            return View(pet);
         }
 
-        // GET: Owners/Delete/5
+        // GET: Pets/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -124,30 +124,30 @@ namespace MyVet.Web.Controllers
                 return NotFound();
             }
 
-            var owner = await _context.Owners
+            var pet = await _context.Pets
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (owner == null)
+            if (pet == null)
             {
                 return NotFound();
             }
 
-            return View(owner);
+            return View(pet);
         }
 
-        // POST: Owners/Delete/5
+        // POST: Pets/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var owner = await _context.Owners.FindAsync(id);
-            _context.Owners.Remove(owner);
+            var pet = await _context.Pets.FindAsync(id);
+            _context.Pets.Remove(pet);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool OwnerExists(int id)
+        private bool PetExists(int id)
         {
-            return _context.Owners.Any(e => e.Id == id);
+            return _context.Pets.Any(e => e.Id == id);
         }
     }
 }
